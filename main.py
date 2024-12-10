@@ -1,19 +1,20 @@
 import re
-from enum import Enum
+from enum import Enum, auto
 
 
 class TokenType(Enum):
-    KEYWORD = 1
-    IDENTIFIER = 2
-    NUMBER = 3
-    SYMBOL = 4
-    STRING = 5
-    NEWLINE = 6
-    EOF = 7
+    KEYWORD = auto()
+    IDENTIFIER = auto()
+    NUMBER = auto()
+    SYMBOL = auto()
+    STRING = auto()
+    NEWLINE = auto()
+    INPUT = auto()
+    EOF = auto()
 
 
 TOKEN_PATTERNS = [
-    (r"LET|IF|THEN|ELSE|END|FOR|NEXT|GOTO|GOSUB|RETURN|REM", TokenType.KEYWORD),
+    (r"LET|IF|THEN|ELSE|END|FOR|NEXT|GOTO|GOSUB|RETURN|REM|INPUT", TokenType.KEYWORD),
     (r"[A-Za-z_][A-Za-z0-9_]*", TokenType.IDENTIFIER),
     (r"\d+(\.\d+)?", TokenType.NUMBER),
     (r"[\+\-\*\/\=\>\<\!$$\,\:\;]", TokenType.SYMBOL),
