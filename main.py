@@ -1,5 +1,6 @@
 import re
 from enum import Enum, auto
+from pathlib import Path
 
 
 class TokenType(Enum):
@@ -35,42 +36,37 @@ class Token:
         return f"Token({TOKEN_TYPE_NAMES[self.type]}, {self.value})"
 
 
-class Lexer:
-    def __init__(self, code):
-        self.code = code
-        self.pos = 0
-        self.tokens = []
-
-    def lex(self):
-        while self.pos < len(self.code):
-            match = None
-            for pattern, token_type in TOKEN_PATTERNS:
-                match = re.match(pattern, self.code[self.pos :])
-                if match:
-                    if token_type is not None:
-                        token = Token(token_type, match.group())
-                        self.tokens.append(token)
-                    self.pos += len(match.group())
-                    break
-            if not match:
-                raise Exception(f"Invalid character at position {self.pos}")
-        self.tokens.append(Token(TokenType.EOF, "EOF"))
-        return self.tokens
+def lex(source: str):
+    pos = 0
+    tokens = []
+    while pos < len(source):
+        match = None
+        for pattern, token_type in TOKEN_PATTERNS:
+            match = re.match(pattern, source[pos:])
+            if match:
+                if token_type is not None:
+                    token = Token(token_type, match.group())
+                    tokens.append(token)
+                pos += len(match.group())
+                break
+        if not match:
+            raise Exception(f"Invalid character at position {pos}")
+    tokens.append(Token(TokenType.EOF, "EOF"))
+    return tokens
 
 
-code = """
-10 LET secret_number = 42
-20 LET guess = 0
-30 PRINT "Guess a number between 1 and 100!"
-40 LET guess = INPUT
-50 IF guess == secret_number THEN PRINT "You win!"
-60 ELSE IF guess < secret_number THEN PRINT "Too low!"
-70 ELSE PRINT "Too high!"
-80 GOTO 40
-90 END
-"""
-lexer = Lexer(code)
-tokens = lexer.lex()
-for token in tokens:
-    if token.type != TokenType.NEWLINE:
-        print(token)
+def main():
+    try:
+        code = Path("guessing_game.bas").read_text()
+        tokens = lex(code)
+        for token in tokens:
+            if token.type != TokenType.NEWLINE:
+                print(token)
+    except FileNotFoundError as e:
+        print(f"Error: File '{e.filename}' not found")
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+if __name__ == "__main__":
+    main()
