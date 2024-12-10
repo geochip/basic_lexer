@@ -44,6 +44,12 @@ def lex(source: str):
         for pattern, token_type in TOKEN_PATTERNS:
             match = re.match(pattern, source[pos:])
             if match:
+                if token_type == TokenType.KEYWORD and match.group() == "REM":
+                    end = source[pos:].find("\n")
+                    token = Token(token_type, source[pos:end])
+                    tokens.append(token)
+                    pos += end - pos
+                    break
                 if token_type is not None:
                     token = Token(token_type, match.group())
                     tokens.append(token)

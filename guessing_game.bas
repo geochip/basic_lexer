@@ -1,9 +1,8 @@
-10 LET secret_number = 42
-20 LET guess = 0
+100 REM Can be tested with https://www.quitebasic.com/
+10 LET S=42
+20 LET G=0
 30 PRINT "Guess a number between 1 and 100!"
-40 LET guess = INPUT
-50 IF guess == secret_number THEN PRINT "You win!"
-60 ELSE IF guess < secret_number THEN PRINT "Too low!"
-70 ELSE PRINT "Too high!"
-80 GOTO 40
-90 END
+40 INPUT "hello"; G
+50 IF G = S THEN PRINT "You win!" ELSE IF G < S THEN PRINT "Too low!" ELSE PRINT "Too high!"
+60 GOTO 40
+70 END
